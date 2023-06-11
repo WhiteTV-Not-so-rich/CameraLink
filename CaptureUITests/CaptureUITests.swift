@@ -2,7 +2,7 @@
 //  CaptureUITests.swift
 //  CaptureUITests
 //
-//  Created by Tom on 6/8/23.
+//  Created by George on 6/8/23.
 //
 
 import XCTest
