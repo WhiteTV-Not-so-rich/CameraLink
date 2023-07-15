@@ -157,6 +157,7 @@ class ViewController: UIViewController, AVCaptureAudioDataOutputSampleBufferDele
         } catch {
             print("Could not create audio device input: \(error)")
         }
+        session.automaticallyConfiguresApplicationAudioSession = false
         
         // Add the photo output.
         if session.canAddOutput(photoOutput) {
@@ -187,6 +188,14 @@ class ViewController: UIViewController, AVCaptureAudioDataOutputSampleBufferDele
             case .success:
                 self.session.startRunning()
                 self.isSessionRunning = self.session.isRunning
+                do {
+                    // 设置音频会话
+                    let audioSession = AVAudioSession.sharedInstance()
+                    try audioSession.setCategory(.playAndRecord, mode: .default, options: [.allowAirPlay, .allowBluetoothA2DP, .defaultToSpeaker])
+                    try audioSession.setActive(true)
+                } catch {
+                    print("Failed to configure audio session: \(error)")
+                }
                 
             case .notAuthorized:
                 DispatchQueue.main.async {
@@ -285,7 +294,7 @@ class ViewController: UIViewController, AVCaptureAudioDataOutputSampleBufferDele
         
         // Create the refresh button
         let refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshButtonTapped))
-        navigationItem.rightBarButtonItem = refreshButton
+        navigationItem.leftBarButtonItem = refreshButton
         
         // Create the record button
         let recordButton = UIBarButtonItem(image: UIImage(systemName: "record.circle"), style: .plain, target: self, action: #selector(recordButtonTapped))
@@ -293,7 +302,7 @@ class ViewController: UIViewController, AVCaptureAudioDataOutputSampleBufferDele
         
         // Create the photo button
         let photoButton = UIBarButtonItem(image: UIImage(systemName: "camera"), style: .plain, target: self, action: #selector(photoButtonTapped))
-        navigationItem.leftBarButtonItems = [recordButton, photoButton]
+        navigationItem.leftBarButtonItems = [recordButton, photoButton, refreshButton]
         
         // Add the navigation item to the navigation bar
         navigationBar.items = [navigationItem]
