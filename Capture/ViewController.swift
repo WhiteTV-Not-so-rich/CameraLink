@@ -62,6 +62,8 @@ class ViewController: UIViewController, AVCaptureAudioDataOutputSampleBufferDele
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        UIApplication.shared.isIdleTimerDisabled = true
+        
         audioEngine.connect(audioEngine.inputNode, to: audioEngine.outputNode, format: audioEngine.inputNode.inputFormat(forBus: 0))
         try! audioEngine.start()
         
